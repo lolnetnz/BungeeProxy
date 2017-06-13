@@ -1,0 +1,6 @@
+name: ${name}
+main: nz.co.lolnet.BungeeProxy
+version: ${version}
+description: BungeeProxy
+author: Byteflux, LX_Gaming
+website: https://www.lolnet.co.nz
