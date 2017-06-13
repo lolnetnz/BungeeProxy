@@ -1,5 +1,5 @@
 name: ${name}
-main: nz.co.lolnet.BungeeProxy
+main: nz.co.lolnet.bungeeproxy.BungeeProxy
 version: ${version}
 description: BungeeProxy
 author: Byteflux, LX_Gaming

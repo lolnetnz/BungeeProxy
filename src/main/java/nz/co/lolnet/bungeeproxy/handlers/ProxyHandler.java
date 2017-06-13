@@ -20,6 +20,7 @@ public class ProxyHandler extends ChannelInboundHandlerAdapter {
 		try {
 			remoteAddress = AbstractChannel.class.getDeclaredField("remoteAddress");
 			getRemoteAddress().setAccessible(true);
+			super.channelActive(ctx);
 		} catch (Exception ex) {
 			BungeeProxy.getInstance().getLogger().severe("Encountered an error processing 'channelActive' in '" + getClass().getSimpleName() + "' - " + ex.getMessage());
 			ex.printStackTrace();
@@ -32,6 +33,7 @@ public class ProxyHandler extends ChannelInboundHandlerAdapter {
 			if (msg instanceof HAProxyMessage && getRemoteAddress() != null) {
 				HAProxyMessage proxyMessage = (HAProxyMessage) msg;
 				getRemoteAddress().set(ctx.channel(), new InetSocketAddress(proxyMessage.sourceAddress(), proxyMessage.sourcePort()));
+				BungeeProxy.getInstance().debugMessage("Successfully processed HAProxyMessage.");
 				return;
 			}
 			
@@ -47,6 +49,7 @@ public class ProxyHandler extends ChannelInboundHandlerAdapter {
 		if (ctx.channel().isActive()) {
 			ctx.channel().writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
 		}
+		
 		BungeeProxy.getInstance().getLogger().severe("Exception caught in '" + getClass().getSimpleName() + "' - " + throwable.getMessage());
 	}
 	
