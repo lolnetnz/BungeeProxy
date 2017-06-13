@@ -40,8 +40,9 @@ repositories {
 }
 
 dependencies {
-    provided("net.md-5:bungeecord-api:1.11-SNAPSHOT")
+    provided("io.netty:netty-all:4.1.9.Final")
     compile("io.netty:netty-codec-haproxy:4.1.9.Final")
+    provided("net.md-5:bungeecord-api:1.11-SNAPSHOT")
     provided("net.md-5:bungeecord-proxy:1.4.7-SNAPSHOT")
 }
 
