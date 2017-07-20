@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
+import io.netty.channel.AbstractChannel;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -16,6 +17,7 @@ public class BungeeProxy extends Plugin {
 	
 	private static BungeeProxy instance;
 	private Config config;
+	private Field remoteAddress;
 	
 	@Override
 	public void onEnable() {
@@ -38,6 +40,9 @@ public class BungeeProxy extends Plugin {
 			initChannelMethod.setAccessible(true);
 			
 			serverChildField.set(null, new ChannelHandler(bungeeChannelInitializer, initChannelMethod));
+			
+			remoteAddress = AbstractChannel.class.getDeclaredField("remoteAddress");
+			getRemoteAddress().setAccessible(true);
 			getLogger().info(Reference.PLUGIN_NAME + " Enabled.");
 		} catch (Exception ex) {
 			BungeeProxy.getInstance().getLogger().severe("Encountered an error processing 'onEnable' in '" + getClass().getSimpleName() + "' - " + ex.getMessage());
@@ -68,6 +73,11 @@ public class BungeeProxy extends Plugin {
 		if (getConfig() != null) {
 			return getConfig().getConfiguration();
 		}
+		
 		return null;
+	}
+	
+	public Field getRemoteAddress() {
+		return remoteAddress;
 	}
 }

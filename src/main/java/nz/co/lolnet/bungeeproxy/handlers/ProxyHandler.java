@@ -1,10 +1,8 @@
 package nz.co.lolnet.bungeeproxy.handlers;
 
-import java.lang.reflect.Field;
 import java.net.InetSocketAddress;
 
 import io.netty.buffer.Unpooled;
-import io.netty.channel.AbstractChannel;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -13,26 +11,12 @@ import nz.co.lolnet.bungeeproxy.BungeeProxy;
 
 public class ProxyHandler extends ChannelInboundHandlerAdapter {
 	
-	private Field remoteAddress;
-	
-	@Override
-	public void channelActive(ChannelHandlerContext ctx) {
-		try {
-			remoteAddress = AbstractChannel.class.getDeclaredField("remoteAddress");
-			getRemoteAddress().setAccessible(true);
-			super.channelActive(ctx);
-		} catch (Exception ex) {
-			BungeeProxy.getInstance().getLogger().severe("Encountered an error processing 'channelActive' in '" + getClass().getSimpleName() + "' - " + ex.getMessage());
-			ex.printStackTrace();
-		}
-	}
-	
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) {
 		try {
-			if (msg instanceof HAProxyMessage && getRemoteAddress() != null) {
+			if (msg instanceof HAProxyMessage && BungeeProxy.getInstance().getRemoteAddress() != null) {
 				HAProxyMessage proxyMessage = (HAProxyMessage) msg;
-				getRemoteAddress().set(ctx.channel(), new InetSocketAddress(proxyMessage.sourceAddress(), proxyMessage.sourcePort()));
+				BungeeProxy.getInstance().getRemoteAddress().set(ctx.channel(), new InetSocketAddress(proxyMessage.sourceAddress(), proxyMessage.sourcePort()));
 				BungeeProxy.getInstance().debugMessage("Successfully processed HAProxyMessage.");
 				return;
 			}
@@ -51,9 +35,6 @@ public class ProxyHandler extends ChannelInboundHandlerAdapter {
 		}
 		
 		BungeeProxy.getInstance().getLogger().severe("Exception caught in '" + getClass().getSimpleName() + "' - " + throwable.getMessage());
-	}
-	
-	private Field getRemoteAddress() {
-		return remoteAddress;
+		throwable.printStackTrace();
 	}
 }
