@@ -8,7 +8,7 @@ if (file(signFile).exists()) {
 targetCompatibility = 1.8
 sourceCompatibility = 1.8
 
-group = "nz.co.lolnet.bungeeproxy"
+group = "nz.co.lolnet"
 archivesBaseName = "BungeeProxy"
 version = "1.0.1"
 
