@@ -3,6 +3,13 @@
 BungeeProxy is a BungeeCord plugin that enables compatibility with HAProxy's PROXY v1 and v2 protocols.
 
 
+# IMPORTANT
+
+BungeeProxy is not required if you are running a version of BungeeCord built after July 1st 2017.
+
+To enable Proxy support with BungeeCord set `proxy_protocol=true` in the `config.yml`
+
+
 ## What's HAProxy?
 
 [HAProxy](http://www.haproxy.org/) is a high performance, open-source Load Balancer and Reverse Proxy for TCP-based services.
